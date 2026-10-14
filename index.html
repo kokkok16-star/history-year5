@@ -199,6 +199,58 @@
   </div>
 
 <script>
+  // 音效合成系统 (Web Audio API)
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  let audioCtx = null;
+
+  function initAudio() {
+    if (!audioCtx) audioCtx = new AudioContext();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+
+  function playSound(type) {
+    try {
+      initAudio();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+
+      if (type === 'correct') {
+        // 答对音效：叮咚~
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } else if (type === 'wrong') {
+        // 答错音效：嘟嘟~
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now); // A3
+        osc.frequency.setValueAtTime(174.61, now + 0.15); // F3
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } else if (type === 'victory') {
+        // 胜利通关音效：锵锵锵~
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.setValueAtTime(659.25, now + 0.15); // E5
+        osc.frequency.setValueAtTime(783.99, now + 0.3); // G5
+        osc.frequency.setValueAtTime(1046.50, now + 0.45); // C6
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+        osc.start(now);
+        osc.stop(now + 0.8);
+      }
+    } catch(e) { console.log('Audio error:', e); }
+  }
+
   const questions = [
     { q: "根据《马来西亚联邦宪法》第152条文，马来语的地位是什么？", opts: ["官方语言", "国语与官方语言", "第二语言", "区域语言"], a: 1 },
     { q: "国语在行政事务中的主要作用是什么？", opts: ["仅用于商业", "官方正式沟通与公文语言", "仅在学校教学", "私人交流"], a: 1 },
@@ -219,6 +271,7 @@
   let cachedData = [];
 
   function startQuiz() {
+    initAudio();
     stuName = document.getElementById('stu-name').value.trim();
     stuEmail = document.getElementById('stu-email').value.trim().toLowerCase();
     
@@ -259,9 +312,11 @@
 
     if(idx === q.a) {
       btn.classList.add('correct');
+      playSound('correct');
       score++;
     } else {
       btn.classList.add('wrong');
+      playSound('wrong');
       btns[q.a].classList.add('correct');
     }
 
@@ -276,6 +331,7 @@
   }
 
   async function finishQuiz() {
+    playSound('victory');
     document.getElementById('quiz-screen').style.display = 'none';
     document.getElementById('result-screen').style.display = 'block';
     document.getElementById('score-text').innerText = `${stuName}，你的得分：${score} / ${questions.length}`;
@@ -317,7 +373,7 @@
     cachedData = list;
     totalCountEl.innerText = `共 ${list.length} 人参与`;
 
-    // 排序逻辑：分数高者靠前；同分则最早提交（timestamp小）靠前
+    // 排序逻辑：分数高者靠前；同分则最早提交靠前
     const sortedList = [...list].sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
       return (a.timestamp || 0) - (b.timestamp || 0);
