@@ -1,455 +1,340 @@
 <!DOCTYPE html>
 <html lang="zh-MY">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>五年级历史 单元11 - 国语的功用与地位</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五年级历史 单元11 - 国语的功用与地位</title>
+  <style>
+    :root {
+      --primary: #6C5CE7;
+      --primary-light: #A29BFE;
+      --secondary: #FD79A8;
+      --accent: #FFEAA7;
+      --bg: #F8F9FA;
+      --text: #2D3436;
+      --white: #FFFFFF;
+      --shadow: 0 10px 25px -5px rgba(108, 92, 231, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Microsoft YaHei, sans-serif; }
+    body { background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 15px; color: var(--text); }
     
-    <!-- Firebase SDK (Compat v9) -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    .card { background: var(--white); border-radius: 24px; padding: 30px; width: 100%; max-width: 680px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; overflow: hidden; }
+    
+    .header { text-align: center; margin-bottom: 25px; }
+    .header h1 { font-size: 24px; color: var(--primary); margin-bottom: 5px; }
+    .header p { color: #636e72; font-size: 14px; }
+    
+    .btn-teacher { position: absolute; top: 15px; right: 15px; background: rgba(108, 92, 231, 0.1); border: none; padding: 8px 12px; border-radius: 12px; cursor: pointer; color: var(--primary); font-size: 12px; font-weight: bold; transition: all 0.2s; }
+    .btn-teacher:hover { background: var(--primary); color: var(--white); }
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
-        
-        body {
-            font-family: 'Fredoka', 'Noto Sans SC', sans-serif;
-            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
-            min-height: 100vh;
-        }
+    .form-group { margin-bottom: 18px; text-align: left; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 14px; color: #4b6584; }
+    .form-group input { width: 100%; padding: 12px 16px; border: 2px solid #e1e8ef; border-radius: 12px; font-size: 15px; outline: none; transition: border-color 0.2s; }
+    .form-group input:focus { border-color: var(--primary); }
 
-        .pink-card {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(10px);
-            border-radius: 2rem;
-            box-shadow: 0 20px 40px rgba(166, 193, 238, 0.3);
-        }
+    .btn { width: 100%; padding: 14px; background: var(--primary); color: var(--white); border: none; border-radius: 14px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.1s, background 0.2s; box-shadow: var(--shadow); }
+    .btn:hover { background: #5b4bc4; }
+    .btn:active { transform: scale(0.98); }
 
-        .pink-btn {
-            background: #ff758c;
-            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-            transition: all 0.25s ease;
-        }
-        .pink-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
-        }
+    .quiz-box { display: none; }
+    .q-count { color: var(--primary); font-weight: bold; font-size: 14px; margin-bottom: 8px; }
+    .q-text { font-size: 18px; font-weight: 600; margin-bottom: 20px; line-height: 1.5; color: #2d3436; }
+    
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .opt-btn { width: 100%; text-align: left; padding: 14px 18px; background: #f1f2f6; border: 2px solid transparent; border-radius: 12px; font-size: 15px; cursor: pointer; transition: all 0.2s; }
+    .opt-btn:hover { background: #dfe4ea; }
+    .opt-btn.correct { background: #55efc4 !important; color: #00b894; border-color: #00b894; font-weight: bold; }
+    .opt-btn.wrong { background: #ff7675 !important; color: #d63031; border-color: #d63031; font-weight: bold; }
 
-        .option-card {
-            background: #ffffff;
-            border: 2px solid #f3f4f6;
-            transition: all 0.2s ease;
-        }
-        .option-card:hover {
-            border-color: #ff7eb3;
-            transform: translateY(-2px);
-        }
-    </style>
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 100; }
+    .modal-content { background: var(--white); padding: 25px; border-radius: 20px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; text-align: center; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+    th, td { border: 1px solid #dfe4ea; padding: 8px; text-align: left; }
+    th { background: var(--primary-light); color: white; }
+    
+    .error-msg { color: #d63031; font-size: 12px; margin-top: 4px; display: none; }
+  </style>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEj7oJnkY71_alcIQYQgFaGgVerQph41s",
+      authDomain: "sejarah-quiz-unit-11.firebaseapp.com",
+      projectId: "sejarah-quiz-unit-11",
+      storageBucket: "sejarah-quiz-unit-11.firebasestorage.app",
+      messagingSenderId: "121616959808",
+      appId: "1:121616959808:web:b48eb598bd12289eef92a5",
+      measurementId: "G-C348TYFFL2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 全局暴露 Firebase 函数
+    window.saveToFirebase = async function(data) {
+      try {
+        await addDoc(collection(db, "quiz_results"), data);
+        console.log("Firebase 提交成功");
+      } catch (e) {
+        console.error("Firebase 保存失败: ", e);
+      }
+    };
+
+    window.loadFromFirebase = async function() {
+      try {
+        const q = query(collection(db, "quiz_results"), orderBy("timestamp", "desc"));
+        const querySnapshot = await getDocs(q);
+        let list = [];
+        querySnapshot.forEach((doc) => {
+          list.push(doc.data());
+        });
+        return list;
+      } catch (e) {
+        console.error("加载 Firebase 失败: ", e);
+        return [];
+      }
+    };
+  </script>
 </head>
-<body class="p-4 md:p-8 flex flex-col justify-between min-h-screen">
+<body>
 
-    <div>
-        <!-- Navbar -->
-        <header class="max-w-4xl mx-auto mb-6 flex justify-between items-center">
-            <div class="flex items-center gap-3 bg-white/70 backdrop-blur-md px-4 py-2 rounded-full border border-white/40 shadow-sm">
-                <span class="text-xl">🇲🇾</span>
-                <h1 class="text-base md:text-lg font-bold text-gray-800">五年级历史 单元11</h1>
-            </div>
-            <button onclick="openTeacherModal()" class="bg-white/80 hover:bg-white text-gray-700 px-4 py-2 rounded-full text-xs font-bold shadow-sm transition border border-white flex items-center gap-1.5">
-                <i class="fa-solid fa-lock text-pink-400"></i>
-                <span>教师后台</span>
-            </button>
-        </header>
+  <div class="card">
+    <button class="btn-teacher" onclick="openTeacherModal()">🔒 教师后台</button>
 
-        <!-- Main Area -->
-        <main class="max-w-2xl mx-auto">
-            <!-- STEP 1: Student Form -->
-            <div id="login-card" class="pink-card p-6 md:p-10 text-center relative overflow-hidden">
-                <!-- Header Icon -->
-                <div class="w-16 h-16 bg-pink-100 text-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
-                    <i class="fa-solid fa-gamepad"></i>
-                </div>
-
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1">国语的功用与地位</h2>
-                <p class="text-gray-500 text-xs md:text-sm mb-6">趣味互动挑战赛 · 10题达人关卡</p>
-
-                <!-- Cat Alert -->
-                <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-3.5 mb-6 flex items-center gap-3 text-left shadow-sm">
-                    <span class="text-2xl">🐱</span>
-                    <p class="text-xs text-amber-900 font-medium leading-relaxed">
-                        <b>我是历史小猫！</b> 准备好展示你的历史知识了吗？先输入姓名和 MOE 账号登录吧！
-                    </p>
-                </div>
-
-                <!-- Form -->
-                <form onsubmit="startQuiz(event)" class="space-y-4 text-left">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1">
-                            <i class="fa-solid fa-user text-pink-400"></i> 学生姓名 Name
-                        </label>
-                        <input type="text" id="student-name" required placeholder="例如：Lim Xiao Ming / 林小明" class="w-full px-4 py-3 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white/80 text-sm text-gray-800">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1">
-                            <i class="fa-solid fa-envelope text-blue-400"></i> MOE 邮箱账号 (Google Classroom)
-                        </label>
-                        <input type="email" id="student-email" required placeholder="m-xxxxxxx@moe-dl.edu.my" class="w-full px-4 py-3 rounded-xl border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/80 text-sm text-gray-800">
-                        <p class="text-[11px] text-gray-400 mt-1">*必须包含 @moe-dl.edu.my 结尾</p>
-                    </div>
-
-                    <button type="submit" class="w-full pink-btn text-white font-bold py-3.5 rounded-xl text-base shadow-md mt-2 flex items-center justify-center gap-2">
-                        <span>🚀 开始挑战 Start Quiz</span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- STEP 2: Quiz Board -->
-            <div id="quiz-card" class="pink-card p-6 md:p-8 hidden">
-                <div class="flex justify-between items-center pb-4 mb-6 border-b border-gray-100">
-                    <span id="question-number" class="text-xs font-bold bg-pink-100 text-pink-600 px-3 py-1 rounded-full">第 1 / 10 题</span>
-                    <span id="score-live" class="text-sm font-bold text-emerald-600">得分: 0</span>
-                </div>
-
-                <div class="mb-6">
-                    <h2 id="question-text" class="text-base md:text-lg font-bold text-gray-800 leading-relaxed mb-4"></h2>
-                    <div id="options-container" class="space-y-3"></div>
-                </div>
-
-                <div id="explanation-box" class="p-4 rounded-xl mb-6 hidden">
-                    <div class="font-bold text-sm mb-1" id="explanation-title"></div>
-                    <p id="explanation-text" class="text-xs md:text-sm leading-relaxed text-gray-700"></p>
-                </div>
-
-                <button id="next-btn" onclick="nextQuestion()" class="w-full pink-btn text-white font-bold py-3.5 rounded-xl transition text-base hidden">
-                    下一题 <i class="fa-solid fa-arrow-right ml-1"></i>
-                </button>
-            </div>
-
-            <!-- STEP 3: Result Card -->
-            <div id="result-card" class="pink-card p-8 text-center hidden">
-                <div class="text-5xl mb-3">🎉</div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-1">挑战完成！</h2>
-                <p class="text-gray-500 text-xs mb-6">成绩已成功上传至云端数据库！</p>
-
-                <div class="bg-pink-50 p-6 rounded-2xl max-w-xs mx-auto mb-6 border border-pink-100">
-                    <div class="text-xs text-pink-400 font-bold uppercase mb-1">最终得分</div>
-                    <div id="final-score" class="text-4xl font-bold text-pink-600">0 / 100</div>
-                </div>
-
-                <button onclick="location.reload()" class="pink-btn text-white px-8 py-3 rounded-xl font-bold transition text-sm">
-                    重新挑战
-                </button>
-            </div>
-        </main>
+    <!-- 登录界面 -->
+    <div id="start-screen">
+      <div class="header">
+        <h1>五角星历史小达人</h1>
+        <p>单元 11：国语的功用与地位</p>
+      </div>
+      <div class="form-group">
+        <label>学生姓名 (Name)</label>
+        <input type="text" id="stu-name" placeholder="请输入你的中英文姓名">
+        <div class="error-msg" id="name-err">请填写姓名</div>
+      </div>
+      <div class="form-group">
+        <label>MOE 邮箱账号 (MOE Email)</label>
+        <input type="email" id="stu-email" placeholder="例: m-12345678@moe-dl.edu.my">
+        <div class="error-msg" id="email-err">邮箱格式必须以 @moe-dl.edu.my 结尾</div>
+      </div>
+      <button class="btn" onclick="startQuiz()">🚀 开始挑战</button>
     </div>
 
-    <!-- Modal: Teacher Area -->
-    <div id="teacher-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-xl w-full p-6 md:p-8 shadow-2xl border border-gray-100">
-            <div class="flex justify-between items-center pb-4 border-b border-gray-100">
-                <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                    <i class="fa-solid fa-user-shield text-pink-500"></i>
-                    教师后台管理 (Unit 11)
-                </h3>
-                <button onclick="closeTeacherModal()" class="text-gray-400 hover:text-gray-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <!-- Password -->
-            <div id="teacher-auth-form" class="py-8">
-                <p class="text-xs text-gray-500 mb-4 text-center">请输入教师专区授权密码以查看云端成绩单：</p>
-                <div class="max-w-xs mx-auto space-y-3">
-                    <input type="password" id="teacher-password" placeholder="请输入密码" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-center outline-none focus:ring-2 focus:ring-pink-400">
-                    <button onclick="authTeacher()" class="w-full pink-btn text-white font-bold py-2.5 rounded-xl text-sm transition">登录验证</button>
-                    <p id="auth-error" class="text-red-500 text-xs text-center hidden">密码错误！</p>
-                </div>
-            </div>
-
-            <!-- Dashboard -->
-            <div id="teacher-dashboard" class="py-4 hidden space-y-4 max-h-[60vh] overflow-y-auto">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs px-2.5 py-1 rounded-full font-semibold bg-emerald-100 text-emerald-700">🟢 云端数据库已实时连接</span>
-                    <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-2 rounded-lg font-bold transition flex items-center gap-1">
-                        <i class="fa-solid fa-file-excel"></i> 导出 CSV 成绩单
-                    </button>
-                </div>
-
-                <div class="border rounded-2xl overflow-hidden bg-white">
-                    <table class="w-full text-left text-xs text-gray-700">
-                        <thead class="bg-gray-50 text-gray-500 border-b">
-                            <tr>
-                                <th class="p-3">学生姓名</th>
-                                <th class="p-3">MOE 邮箱</th>
-                                <th class="p-3">得分</th>
-                                <th class="p-3">提交时间</th>
-                            </tr>
-                        </thead>
-                        <tbody id="student-table-body" class="divide-y">
-                            <tr><td colspan="4" class="p-4 text-center text-gray-400">正在同步数据...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <!-- 答题界面 -->
+    <div id="quiz-screen" class="quiz-box">
+      <div class="q-count" id="q-idx">第 1 / 10 题</div>
+      <div class="q-text" id="q-text">问题内容...</div>
+      <div class="options" id="options-box"></div>
     </div>
 
-    <!-- Script Application -->
-    <script>
-        // Real Live Config for Unit 11
-        const firebaseConfig = {
-            apiKey: "AIzaSyDEj7oJnkY71_alcIQYQgFaGgVerQph41s",
-            authDomain: "sejarah-quiz-unit-11.firebaseapp.com",
-            projectId: "sejarah-quiz-unit-11",
-            storageBucket: "sejarah-quiz-unit-11.firebasestorage.app",
-            messagingSenderId: "121616959808",
-            appId: "1:121616959808:web:b48eb598bd12289eef92a5",
-            measurementId: "G-C348TYFFL2"
-        };
+    <!-- 结算界面 -->
+    <div id="result-screen" class="quiz-box" style="text-align: center;">
+      <div class="header">
+        <h1>🎉 挑战完成！</h1>
+        <p id="score-text" style="font-size: 20px; font-weight: bold; color: var(--primary); margin: 15px 0;"></p>
+      </div>
+      <button class="btn" onclick="location.reload()">重新挑战</button>
+    </div>
+  </div>
 
-        let db = null;
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
-        } catch(e) {
-            console.warn("Firebase Init:", e);
-        }
+  <!-- 教师验证弹窗 -->
+  <div class="modal" id="login-modal">
+    <div class="modal-content">
+      <h3>教师身份验证</h3>
+      <input type="password" id="pwd-input" placeholder="密码" style="width: 100%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; border-radius: 8px;">
+      <button class="btn" onclick="checkPwd()">登录</button>
+    </div>
+  </div>
 
-        // 10 Unit 11 Bahasa Melayu History Questions
-        const quizData = [
-            {
-                q: "根据《马来西亚联邦宪法》第152条文，马来语（Bahasa Melayu）的地位是什么？",
-                options: ["联邦官方语言及国语 (Bahasa Kebangsaan)", "第二官方语言", "仅商业交流语言", "区域方言"],
-                answer: 0,
-                explain: "联邦宪法第152条文明确规定，马来语为马来西亚的国语与官方语言。"
-            },
-            {
-                q: "国语在多元种族的马来西亚扮演着什么最重要的角色？",
-                options: ["促进国民团结的语言 (Bahasa Perpaduan)", "仅用于学校考试", "仅在宫廷使用", "国际贸易专用语言"],
-                answer: 0,
-                explain: "国语是联系多元种族沟通的桥梁，也是促进国民团结的重要工具。"
-            },
-            {
-                q: "以下哪一个机构负责推广、规范及出版马来语典籍与词典？",
-                options: ["国家语文局 (Dewan Bahasa dan Pustaka - DBP)", "教育部 (KPM)", "国家图书馆", "国家档案馆"],
-                answer: 0,
-                explain: "Dewan Bahasa dan Pustaka (DBP) 是维护和推广马来语的最高机构。"
-            },
-            {
-                q: "在马六甲王朝时代，马来语曾作为什么语言横跨东南亚？",
-                options: ["通用语 (Lingua Franca)", "科技专有语言", "仅宗教祷告语言", "部落语言"],
-                answer: 0,
-                explain: "在马六甲王朝繁荣时期，马来语作为通用语（Lingua Franca），供各国商人交流交易。"
-            },
-            {
-                q: "每年举办的“国语月”(Bulan Bahasa Kebangsaan) 旨在：",
-                options: ["提高国民对国语的重视与热爱", "选拔最佳语文老师", "推广外语学习", "展示古老文字"],
-                answer: 0,
-                explain: "举办国语月是为了强化人民对国语的爱护与日常使用尊崇。"
-            },
-            {
-                q: "在国家教育体系中，国语的主要功用是什么？",
-                options: ["国家教育系统的主要教学媒介语 (Bahasa Pengantar)", "选修科目", "仅高年级科目", "课外活动语言"],
-                answer: 0,
-                explain: "国语是国家教育体系的主要教学媒介语，贯穿国民教育系统。"
-            },
-            {
-                q: "在法庭和政府官方事务中，国语的功用是：",
-                options: ["官方行政与法律事务的主要语言", "仅用于草稿", "仅用于口头谈话", "不具约束力"],
-                answer: 0,
-                explain: "政府部门的公函、官方会议及法庭审讯均以国语作为官方文书语言。"
-            },
-            {
-                q: "古代马来语曾吸收了哪些外来语的词汇？（例如：Bumi, Raja）",
-                options: ["梵文 (Bahasa Sanskrit)", "拉丁文", "法文", "德文"],
-                answer: 0,
-                explain: "早期的古代马来语融合吸收了梵文（Sanskrit）词汇，丰富了其语言体系。"
-            },
-            {
-                q: "国家原则 (Rukun Negara) 和国家文化政策如何看待国语？",
-                options: ["国语是构建国家文化与身份认同的核心元素", "国语不重要", "仅供仪式使用", "与文化无关"],
-                answer: 0,
-                explain: "国语是塑造国家形象与马来西亚人独特身份认同的重要基石。"
-            },
-            {
-                q: "作为马来西亚公民，我们应该如何对待国语？",
-                options: ["以尊重的态度在日常生活中积极流利使用国语", "只在考试时使用", "完全拒绝学习", "只在政府部门使用"],
-                answer: 0,
-                explain: "身为国民，热爱并流利掌握国语是展现爱国精神的重要体现。"
-            }
-        ];
+  <!-- 教师后台数据弹窗 -->
+  <div class="modal" id="teacher-modal">
+    <div class="modal-content" style="max-width: 650px;">
+      <h3>全班成绩后台 (Firebase 云端同步)</h3>
+      <div style="margin: 10px 0; text-align: right;">
+        <button onclick="exportCSV()" style="padding: 6px 12px; background: #00b894; color: white; border: none; border-radius: 6px; cursor: pointer;">📥 导出 Excel/CSV</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>姓名</th>
+            <th>MOE 账号</th>
+            <th>得分</th>
+            <th>提交时间</th>
+          </tr>
+        </thead>
+        <tbody id="teacher-table"></tbody>
+      </table>
+      <button class="btn" onclick="closeModals()" style="margin-top: 15px; background: #636e72;">关闭</button>
+    </div>
+  </div>
 
-        let currentQuizIndex = 0;
-        let score = 0;
-        let studentInfo = { name: '', email: '' };
+<script>
+  const questions = [
+    { q: "根据《马来西亚联邦宪法》第152条文，马来语的地位是什么？", opts: ["官方语言", "国语与官方语言", "第二语言", "区域语言"], a: 1 },
+    { q: "国语在行政事务中的主要作用是什么？", opts: ["仅用于商业", "官方正式沟通与公文语言", "仅在学校教学", "私人交流"], a: 1 },
+    { q: "国语促进种族团结的主要原因是？", opts: ["它是唯一的语言", "作为共同的沟通桥梁", "它是最容易学的语言", "法律强制要求"], a: 1 },
+    { q: "以下哪项是国语作为商业语言的体现？", opts: ["签署官方商业契约与合同", "只在市场买菜使用", "国际贸易唯一语言", "不能在商业中使用"], a: 0 },
+    { q: "马来西亚哪部法律保障了国语作为官方语言的地位？", opts: ["《教育法案》", "《联邦宪法》", "《国家安全法》", "《劳动法》"], a: 1 },
+    { q: "国语在教育领域扮演什么角色？", opts: ["主要教学媒介语之一", "外语课程", "可选修科目", "仅用于体育课"], a: 0 },
+    { q: "建立国语的权威性有助于提升什么？", opts: ["个人知名度", "国家形象与尊严", "旅游收入", "科技发展"], a: 1 },
+    { q: "国家语文局（DBP）的主要职责是什么？", opts: ["推广与规范国语的使用", "修改国家宪法", "管理全国学校", "出版所有商业书籍"], a: 0 },
+    { q: "每年的“国语月”活动旨在？", opts: ["举行体育比赛", "提高国民对国语的热爱与掌握", "庆祝节日", "推广外语学习"], a: 1 },
+    { q: "身为马来西亚公民，我们应该如何对待国语？", opts: ["仅在考试时使用", "尊重、学习并自豪地使用国语", "忽略它", "只在家里使用"], a: 1 }
+  ];
 
-        function startQuiz(e) {
-            e.preventDefault();
-            const name = document.getElementById('student-name').value.trim();
-            const email = document.getElementById('student-email').value.trim().toLowerCase();
+  let currentQ = 0;
+  let score = 0;
+  let stuName = "";
+  let stuEmail = "";
+  let cachedData = [];
 
-            if (!email.endsWith('@moe-dl.edu.my')) {
-                alert("请输入以 @moe-dl.edu.my 结尾的 MOE 官方邮箱！");
-                return;
-            }
+  function startQuiz() {
+    stuName = document.getElementById('stu-name').value.trim();
+    stuEmail = document.getElementById('stu-email').value.trim().toLowerCase();
+    
+    let valid = true;
+    if(!stuName) { document.getElementById('name-err').style.display = 'block'; valid = false; }
+    else { document.getElementById('name-err').style.display = 'none'; }
 
-            studentInfo = { name, email };
+    if(!stuEmail.endsWith('@moe-dl.edu.my')) { document.getElementById('email-err').style.display = 'block'; valid = false; }
+    else { document.getElementById('email-err').style.display = 'none'; }
 
-            document.getElementById('login-card').classList.add('hidden');
-            document.getElementById('quiz-card').classList.remove('hidden');
+    if(!valid) return;
 
-            currentQuizIndex = 0;
-            score = 0;
-            loadQuestion();
-        }
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('quiz-screen').style.display = 'block';
+    showQuestion();
+  }
 
-        function loadQuestion() {
-            const data = quizData[currentQuizIndex];
-            document.getElementById('question-number').innerText = `第 ${currentQuizIndex + 1} / ${quizData.length} 题`;
-            document.getElementById('question-text').innerText = data.q;
-            document.getElementById('explanation-box').classList.add('hidden');
-            document.getElementById('next-btn').classList.add('hidden');
+  function showQuestion() {
+    const q = questions[currentQ];
+    document.getElementById('q-idx').innerText = `第 ${currentQ + 1} / ${questions.length} 题`;
+    document.getElementById('q-text').innerText = q.q;
+    
+    const optsBox = document.getElementById('options-box');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.innerText = opt;
+      btn.onclick = () => selectOpt(idx, btn);
+      optsBox.appendChild(btn);
+    });
+  }
 
-            const container = document.getElementById('options-container');
-            container.innerHTML = '';
+  function selectOpt(idx, btn) {
+    const q = questions[currentQ];
+    const btns = document.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
 
-            data.options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = "option-card w-full text-left p-4 rounded-xl font-medium text-sm text-gray-800 flex items-center justify-between";
-                btn.innerHTML = `<span>${String.fromCharCode(65 + idx)}. ${opt}</span> <i class="fa-regular fa-circle text-gray-300"></i>`;
-                btn.onclick = () => checkAnswer(idx);
-                container.appendChild(btn);
-            });
-        }
+    if(idx === q.a) {
+      btn.classList.add('correct');
+      score++;
+    } else {
+      btn.classList.add('wrong');
+      btns[q.a].classList.add('correct');
+    }
 
-        function checkAnswer(selectedIndex) {
-            const data = quizData[currentQuizIndex];
-            const options = document.querySelectorAll('.option-card');
-            options.forEach(b => b.disabled = true);
+    setTimeout(() => {
+      currentQ++;
+      if(currentQ < questions.length) {
+        showQuestion();
+      } else {
+        finishQuiz();
+      }
+    }, 1200);
+  }
 
-            const expBox = document.getElementById('explanation-box');
-            const expTitle = document.getElementById('explanation-title');
-            const expText = document.getElementById('explanation-text');
+  function finishQuiz() {
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'block';
+    document.getElementById('score-text').innerText = `${stuName}，你的得分：${score} / ${questions.length}`;
+    
+    const data = {
+      name: stuName,
+      email: stuEmail,
+      score: score,
+      time: new Date().toLocaleString('zh-MY'),
+      timestamp: Date.now()
+    };
 
-            if (selectedIndex === data.answer) {
-                score += Math.round(100 / quizData.length);
-                options[selectedIndex].classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-800');
-                options[selectedIndex].querySelector('i').className = "fa-solid fa-circle-check text-emerald-500";
+    // 本地备份
+    let local = JSON.parse(localStorage.getItem('history_scores') || '[]');
+    local.unshift(data);
+    localStorage.setItem('history_scores', JSON.stringify(local));
 
-                expBox.className = "p-4 rounded-xl mb-6 bg-emerald-50 border border-emerald-200 text-emerald-800";
-                expTitle.innerHTML = `<i class="fa-solid fa-circle-check"></i> 回答正确！`;
-            } else {
-                options[selectedIndex].classList.add('bg-red-50', 'border-red-500', 'text-red-800');
-                options[selectedIndex].querySelector('i').className = "fa-solid fa-circle-xmark text-red-500";
+    // Firebase 保存
+    if (window.saveToFirebase) {
+      window.saveToFirebase(data);
+    }
+  }
 
-                options[data.answer].classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-800');
+  function openTeacherModal() {
+    document.getElementById('login-modal').style.display = 'flex';
+  }
 
-                expBox.className = "p-4 rounded-xl mb-6 bg-red-50 border border-red-200 text-red-800";
-                expTitle.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> 回答错误`;
-            }
+  function checkPwd() {
+    const pwd = document.getElementById('pwd-input').value;
+    if(pwd === '2020Hui%%') {
+      document.getElementById('login-modal').style.display = 'none';
+      document.getElementById('teacher-modal').style.display = 'flex';
+      loadTeacherData();
+    } else {
+      alert('密码错误！');
+    }
+  }
 
-            expText.innerText = data.explain;
-            expBox.classList.remove('hidden');
-            document.getElementById('score-live').innerText = `得分: ${score}`;
-            document.getElementById('next-btn').classList.remove('hidden');
-        }
+  async function loadTeacherData() {
+    const tbody = document.getElementById('teacher-table');
+    tbody.innerHTML = '<tr><td colspan="4">加载 Firebase 数据中...</td></tr>';
 
-        function nextQuestion() {
-            currentQuizIndex++;
-            if (currentQuizIndex < quizData.length) {
-                loadQuestion();
-            } else {
-                finishQuiz();
-            }
-        }
+    if (window.loadFromFirebase) {
+      let cloudList = await window.loadFromFirebase();
+      if (cloudList && cloudList.length > 0) {
+        cachedData = cloudList;
+        renderTable(cloudList);
+        return;
+      }
+    }
+    
+    // 如果云端为空或异常，尝试加载本地
+    cachedData = JSON.parse(localStorage.getItem('history_scores') || '[]');
+    renderTable(cachedData);
+  }
 
-        function finishQuiz() {
-            document.getElementById('quiz-card').classList.add('hidden');
-            document.getElementById('result-card').classList.remove('hidden');
-            document.getElementById('final-score').innerText = `${score} / 100`;
+  function renderTable(list) {
+    const tbody = document.getElementById('teacher-table');
+    tbody.innerHTML = '';
+    if(!list || list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4">暂无提交记录</td></tr>';
+      return;
+    }
+    list.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${item.name}</td><td>${item.email}</td><td>${item.score}/10</td><td>${item.time}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
 
-            const payload = {
-                name: studentInfo.name,
-                email: studentInfo.email,
-                score: score,
-                timestamp: new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Kuala_Lumpur' })
-            };
+  function exportCSV() {
+    let list = cachedData.length > 0 ? cachedData : JSON.parse(localStorage.getItem('history_scores') || '[]');
+    let csv = "\uFEFF姓名,MOE账号,得分,提交时间\n";
+    list.forEach(r => { csv += `"${r.name}","${r.email}","${r.score}","${r.time}"\n`; });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "五年级历史单元11学生成绩.csv";
+    link.click();
+  }
 
-            if (db) {
-                db.collection("quiz_results").add(payload)
-                .then(() => console.log("Cloud Saved!"))
-                .catch(e => console.error("Cloud error:", e));
-            }
-        }
-
-        function openTeacherModal() {
-            document.getElementById('teacher-modal').classList.remove('hidden');
-        }
-        function closeTeacherModal() {
-            document.getElementById('teacher-modal').classList.add('hidden');
-        }
-
-        function authTeacher() {
-            const pwd = document.getElementById('teacher-password').value;
-            if (pwd === '2020Hui%%') {
-                document.getElementById('teacher-auth-form').classList.add('hidden');
-                document.getElementById('teacher-dashboard').classList.remove('hidden');
-                document.getElementById('auth-error').classList.add('hidden');
-                fetchResults();
-            } else {
-                document.getElementById('auth-error').classList.remove('hidden');
-            }
-        }
-
-        function fetchResults() {
-            const tbody = document.getElementById('student-table-body');
-            tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-400">数据加载中...</td></tr>';
-
-            if (db) {
-                db.collection("quiz_results").orderBy("timestamp", "desc").get()
-                .then((querySnapshot) => {
-                    if (querySnapshot.empty) {
-                        tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-gray-400">暂无学生提交记录</td></tr>';
-                        return;
-                    }
-                    tbody.innerHTML = '';
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        tbody.innerHTML += `
-                            <tr class="hover:bg-gray-50 border-b">
-                                <td class="p-3 font-semibold text-gray-800">${data.name}</td>
-                                <td class="p-3 text-gray-500">${data.email}</td>
-                                <td class="p-3 font-bold text-pink-600">${data.score} 分</td>
-                                <td class="p-3 text-[10px] text-gray-400">${data.timestamp}</td>
-                            </tr>
-                        `;
-                    });
-                })
-                .catch((err) => {
-                    tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-red-500">无法连接云端，请重试</td></tr>';
-                });
-            }
-        }
-
-        function exportToCSV() {
-            if (!db) return;
-            db.collection("quiz_results").get().then(snapshot => {
-                let csv = '学生姓名,MOE邮箱,得分,提交时间\n';
-                snapshot.forEach(doc => {
-                    const d = doc.data();
-                    csv += `"${d.name}","${d.email}","${d.score}","${d.timestamp}"\n`;
-                });
-                const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `5年级历史成绩单_Unit11_${new Date().toISOString().slice(0,10)}.csv`;
-                a.click();
-            });
-        }
-    </script>
+  function closeModals() {
+    document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+  }
+</script>
 </body>
 </html>
