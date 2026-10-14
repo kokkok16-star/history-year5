@@ -47,6 +47,20 @@
     .opt-btn.correct { background: #55efc4 !important; color: #00b894; border-color: #00b894; font-weight: bold; }
     .opt-btn.wrong { background: #ff7675 !important; color: #d63031; border-color: #d63031; font-weight: bold; }
 
+    /* 排行榜样式 */
+    .leaderboard-box { margin-top: 20px; background: #f8f9fa; border-radius: 16px; padding: 18px; text-align: left; border: 1px solid #e9ecef; }
+    .leaderboard-title { font-size: 16px; font-weight: bold; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+    .rank-list { max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+    .rank-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: white; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); font-size: 14px; }
+    .rank-num { font-weight: bold; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #e0e0e0; color: #555; font-size: 12px; margin-right: 10px; flex-shrink: 0; }
+    .rank-1 .rank-num { background: #ffd700; color: #8a6d00; }
+    .rank-2 .rank-num { background: #c0c0c0; color: #4a4a4a; }
+    .rank-3 .rank-num { background: #cd7f32; color: #5c3a17; }
+    .rank-info { flex-grow: 1; display: flex; flex-direction: column; }
+    .rank-name { font-weight: 600; color: #2d3436; }
+    .rank-time { font-size: 11px; color: #b2bec3; }
+    .rank-score { font-weight: bold; color: var(--primary); font-size: 15px; }
+
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 100; }
     .modal-content { background: var(--white); padding: 25px; border-radius: 20px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; text-align: center; }
     
@@ -75,7 +89,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // 全局暴露 Firebase 函数
     window.saveToFirebase = async function(data) {
       try {
         await addDoc(collection(db, "quiz_results"), data);
@@ -138,7 +151,19 @@
         <h1>🎉 挑战完成！</h1>
         <p id="score-text" style="font-size: 20px; font-weight: bold; color: var(--primary); margin: 15px 0;"></p>
       </div>
-      <button class="btn" onclick="location.reload()">重新挑战</button>
+
+      <!-- 全员排行榜 -->
+      <div class="leaderboard-box">
+        <div class="leaderboard-title">
+          <span>🏆 全员实时英雄榜</span>
+          <span id="total-count" style="font-size: 12px; color: #636e72; font-weight: normal;">加载中...</span>
+        </div>
+        <div class="rank-list" id="rank-list">
+          <div style="text-align: center; color: #b2bec3; padding: 10px;">加载排行榜中...</div>
+        </div>
+      </div>
+
+      <button class="btn" onclick="location.reload()" style="margin-top: 20px;">再次挑战</button>
     </div>
   </div>
 
@@ -250,7 +275,7 @@
     }, 1200);
   }
 
-  function finishQuiz() {
+  async function finishQuiz() {
     document.getElementById('quiz-screen').style.display = 'none';
     document.getElementById('result-screen').style.display = 'block';
     document.getElementById('score-text').innerText = `${stuName}，你的得分：${score} / ${questions.length}`;
@@ -270,8 +295,55 @@
 
     // Firebase 保存
     if (window.saveToFirebase) {
-      window.saveToFirebase(data);
+      await window.saveToFirebase(data);
     }
+
+    // 渲染排行榜
+    loadAndRenderLeaderboard();
+  }
+
+  async function loadAndRenderLeaderboard() {
+    const rankListEl = document.getElementById('rank-list');
+    const totalCountEl = document.getElementById('total-count');
+
+    let list = [];
+    if (window.loadFromFirebase) {
+      list = await window.loadFromFirebase();
+    }
+    if (!list || list.length === 0) {
+      list = JSON.parse(localStorage.getItem('history_scores') || '[]');
+    }
+
+    cachedData = list;
+    totalCountEl.innerText = `共 ${list.length} 人参与`;
+
+    // 排序逻辑：分数高者靠前；同分则最早提交（timestamp小）靠前
+    const sortedList = [...list].sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return (a.timestamp || 0) - (b.timestamp || 0);
+    });
+
+    rankListEl.innerHTML = '';
+    if (sortedList.length === 0) {
+      rankListEl.innerHTML = '<div style="text-align: center; color: #b2bec3; padding: 10px;">暂无排名记录</div>';
+      return;
+    }
+
+    sortedList.forEach((item, index) => {
+      const rank = index + 1;
+      const rankClass = rank <= 3 ? `rank-${rank}` : '';
+      const div = document.createElement('div');
+      div.className = `rank-item ${rankClass}`;
+      div.innerHTML = `
+        <div class="rank-num">${rank}</div>
+        <div class="rank-info">
+          <div class="rank-name">${item.name}</div>
+          <div class="rank-time">${item.time}</div>
+        </div>
+        <div class="rank-score">${item.score} 分</div>
+      `;
+      rankListEl.appendChild(div);
+    });
   }
 
   function openTeacherModal() {
@@ -302,7 +374,6 @@
       }
     }
     
-    // 如果云端为空或异常，尝试加载本地
     cachedData = JSON.parse(localStorage.getItem('history_scores') || '[]');
     renderTable(cachedData);
   }
