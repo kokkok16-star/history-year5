@@ -1,908 +1,312 @@
 <!DOCTYPE html>
 <html lang="zh-MY">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>五年级历史 单元11：国语的功用与地位 互动练习</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            macaron: {
-              pink: '#FFD1DC',
-              blue: '#B5EAD7',
-              yellow: '#FFF5BA',
-              purple: '#E2F0CB',
-              lavender: '#C7CEEA',
-              accent: '#FF8B94',
-              dark: '#5A5265',
-              darker: '#3E3846'
-            }
-          },
-          fontFamily: {
-            sans: ['Inter', 'Comic Sans MS', 'Chalkboard SE', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五年级历史 单元11 - 国语的功用与地位</title>
   <style>
-    body {
-      background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
-      min-height: 100vh;
-      color: #4A4A4A;
-      user-select: none;
+    :root {
+      --primary: #6C5CE7;
+      --primary-light: #A29BFE;
+      --secondary: #FD79A8;
+      --accent: #FFEAA7;
+      --bg: #F8F9FA;
+      --text: #2D3436;
+      --white: #FFFFFF;
+      --shadow: 0 10px 25px -5px rgba(108, 92, 231, 0.15);
     }
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(12px);
-      border: 3px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-    }
-
-    .btn-3d {
-      transition: all 0.15s ease-in-out;
-      box-shadow: 0 6px 0 shadow-color, 0 10px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-3d:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0 shadow-color, 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-macaron-primary {
-      background-color: #FF8B94;
-      --tw-shadow-color: #D66D75;
-      color: white;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Microsoft YaHei, sans-serif; }
+    body { background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 15px; color: var(--text); }
     
-    .btn-macaron-secondary {
-      background-color: #70A1FF;
-      --tw-shadow-color: #4B6584;
-      color: white;
-    }
+    .card { background: var(--white); border-radius: 24px; padding: 30px; width: 100%; max-width: 680px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative; overflow: hidden; }
+    
+    .header { text-align: center; margin-bottom: 25px; }
+    .header h1 { font-size: 24px; color: var(--primary); margin-bottom: 5px; }
+    .header p { color: #636e72; font-size: 14px; }
+    
+    .btn-teacher { position: absolute; top: 15px; right: 15px; background: rgba(108, 92, 231, 0.1); border: none; padding: 8px 12px; border-radius: 12px; cursor: pointer; color: var(--primary); font-size: 12px; font-weight: bold; transition: all 0.2s; }
+    .btn-teacher:hover { background: var(--primary); color: var(--white); }
 
-    .btn-option {
-      background-color: #F8F9FA;
-      border: 2px solid #E9ECEF;
-      transition: all 0.2s;
-    }
+    .form-group { margin-bottom: 18px; text-align: left; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 14px; color: #4b6584; }
+    .form-group input { width: 100%; padding: 12px 16px; border: 2px solid #e1e8ef; border-radius: 12px; font-size: 15px; outline: none; transition: border-color 0.2s; }
+    .form-group input:focus { border-color: var(--primary); }
 
-    .btn-option:hover:not(:disabled) {
-      background-color: #FFF5BA;
-      border-color: #FFD166;
-      transform: translateY(-2px);
-    }
+    .btn { width: 100%; padding: 14px; background: var(--primary); color: var(--white); border: none; border-radius: 14px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.1s, background 0.2s; box-shadow: var(--shadow); }
+    .btn:hover { background: #5b4bc4; }
+    .btn:active { transform: scale(0.98); }
 
-    .option-correct {
-      background-color: #D4EDDA !important;
-      border-color: #28A745 !important;
-      color: #155724 !important;
-      font-weight: bold;
-    }
+    .quiz-box { display: none; }
+    .q-count { color: var(--primary); font-weight: bold; font-size: 14px; margin-bottom: 8px; }
+    .q-text { font-size: 18px; font-weight: 600; margin-bottom: 20px; line-height: 1.5; color: #2d3436; }
+    
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .opt-btn { width: 100%; text-align: left; padding: 14px 18px; background: #f1f2f6; border: 2px solid transparent; border-radius: 12px; font-size: 15px; cursor: pointer; transition: all 0.2s; }
+    .opt-btn:hover { background: #dfe4ea; }
+    .opt-btn.correct { background: #55efc4 !important; color: #00b894; border-color: #00b894; font-weight: bold; }
+    .opt-btn.wrong { background: #ff7675 !important; color: #d63031; border-color: #d63031; font-weight: bold; }
 
-    .option-wrong {
-      background-color: #F8D7DA !important;
-      border-color: #DC3545 !important;
-      color: #721C24 !important;
-    }
-
-    /* Floating background items */
-    .floating-item {
-      position: absolute;
-      pointer-events: none;
-      animation: float 8s infinite ease-in-out;
-      opacity: 0.35;
-      z-index: 0;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-25px) rotate(15deg); }
-    }
-
-    /* Mascot Speech Bubble */
-    .speech-bubble {
-      position: relative;
-      background: #ffffff;
-      border-radius: 1.25em;
-      border: 2px solid #FF8B94;
-    }
-    .speech-bubble:after {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 0;
-      height: 0;
-      border: 12px solid transparent;
-      border-right-color: #ffffff;
-      border-left: 0;
-      margin-top: -12px;
-      margin-left: -12px;
-    }
-
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #FF8B94;
-      border-radius: 10px;
-    }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 100; }
+    .modal-content { background: var(--white); padding: 25px; border-radius: 20px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; text-align: center; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+    th, td { border: 1px solid #dfe4ea; padding: 8px; text-align: left; }
+    th { background: var(--primary-light); color: white; }
+    
+    .error-msg { color: #d63031; font-size: 12px; margin-top: 4px; display: none; }
   </style>
 </head>
-<body class="flex flex-col min-h-screen relative overflow-x-hidden font-sans">
+<body>
 
-  <div class="floating-item text-4xl" style="top: 10%; left: 8%; animation-delay: 0s;"><i class="fa-solid fa-book-open text-pink-400"></i></div>
-  <div class="floating-item text-3xl" style="top: 20%; right: 10%; animation-delay: 2s;"><i class="fa-solid fa-star text-yellow-400"></i></div>
-  <div class="floating-item text-4xl" style="bottom: 15%; left: 12%; animation-delay: 4s;"><i class="fa-solid fa-heart text-red-300"></i></div>
-  <div class="floating-item text-5xl" style="bottom: 20%; right: 15%; animation-delay: 1s;"><i class="fa-solid fa-graduation-cap text-indigo-300"></i></div>
+  <div class="card">
+    <button class="btn-teacher" onclick="openTeacherModal()">🔒 教师后台</button>
 
-  <header class="w-full p-4 flex justify-between items-center z-20 max-w-4xl mx-auto">
-    <div class="flex items-center gap-2">
-      <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md text-pink-500 font-bold text-xl">
-        🇲🇾
+    <!-- 登录界面 -->
+    <div id="start-screen">
+      <div class="header">
+        <h1>五角星历史小达人</h1>
+        <p>单元 11：国语的功用与地位</p>
       </div>
-      <span class="font-bold text-lg md:text-xl text-gray-800 tracking-wide drop-shadow-sm">五年级历史 单元11</span>
-    </div>
-    
-    <!-- Secret Teacher Entry Point -->
-    <button id="teacherBtn" onclick="openTeacherAuthModal()" class="text-xs bg-white/70 hover:bg-white text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-full border border-gray-300 transition-all flex items-center gap-1.5 shadow-sm">
-      <i class="fa-solid fa-lock text-gray-400"></i>
-      <span>🔒 教师后台</span>
-    </button>
-  </header>
-
-  <main class="flex-1 flex items-center justify-center p-4 z-10 w-full max-w-3xl mx-auto">
-    
-    <!-- 1. LOGIN / WELCOME SCREEN -->
-    <div id="loginCard" class="w-full glass-card rounded-3xl p-6 md:p-8 text-center transition-all duration-300">
-      <div class="mb-4 inline-block p-4 bg-pink-100 rounded-full text-pink-500 shadow-inner">
-        <i class="fa-solid fa-gamepad text-4xl"></i>
+      <div class="form-group">
+        <label>学生姓名 (Name)</label>
+        <input type="text" id="stu-name" placeholder="请输入你的中英文姓名">
+        <div class="error-msg" id="name-err">请填写姓名</div>
       </div>
-      <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-2">国语的功用与地位</h1>
-      <p class="text-gray-600 text-sm md:text-base mb-6">趣味互动挑战赛 · 10题达人关卡</p>
-
-      <!-- Mascot Greeting -->
-      <div class="flex items-center justify-center gap-3 mb-6 bg-amber-50 p-3 rounded-2xl border border-amber-200">
-        <div class="text-4xl animate-bounce">🐱</div>
-        <div class="text-left text-xs md:text-sm text-amber-800 font-medium">
-          我是<strong>历史小猫</strong>！准备好展示你的历史知识了吗？先输入姓名和 MOE 账号登录吧！
-        </div>
+      <div class="form-group">
+        <label>MOE 邮箱账号 (MOE Email)</label>
+        <input type="email" id="stu-email" placeholder="例: m-12345678@moe-dl.edu.my">
+        <div class="error-msg" id="email-err">邮箱格式必须以 @moe-dl.edu.my 结尾</div>
       </div>
-
-      <div class="space-y-4 max-w-md mx-auto text-left">
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1 ml-1"><i class="fa-solid fa-user text-pink-400 mr-1"></i> 学生姓名 Name</label>
-          <input type="text" id="studentName" placeholder="例如：Lim Xiao Ming / 林小明" 
-            class="w-full px-4 py-3 rounded-xl border-2 border-pink-200 focus:border-pink-400 focus:outline-none transition text-gray-700 text-sm bg-white/80" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1 ml-1"><i class="fa-solid fa-envelope text-blue-400 mr-1"></i> MOE 邮箱账号 (Google Classroom)</label>
-          <input type="email" id="studentMoe" placeholder="m-xxxxxxx@moe-dl.edu.my" 
-            class="w-full px-4 py-3 rounded-xl border-2 border-blue-200 focus:border-blue-400 focus:outline-none transition text-gray-700 text-sm bg-white/80" />
-          <p class="text-[11px] text-gray-400 mt-1 ml-1">*必须包含 @moe-dl.edu.my 结尾</p>
-        </div>
-
-        <div id="loginError" class="hidden text-xs text-red-500 bg-red-50 p-2.5 rounded-lg border border-red-200 text-center font-medium"></div>
-
-        <button onclick="startQuiz()" class="w-full py-3.5 rounded-xl font-bold text-lg btn-3d btn-macaron-primary mt-2">
-          🚀 开始挑战 Start Quiz
-        </button>
-      </div>
+      <button class="btn" onclick="startQuiz()">🚀 开始挑战</button>
     </div>
 
-    <!-- 2. QUIZ QUESTION SCREEN -->
-    <div id="quizCard" class="hidden w-full glass-card rounded-3xl p-5 md:p-8 transition-all duration-300">
-      
-      <!-- Top Status Bar -->
-      <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-100">
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-bold bg-pink-100 text-pink-600 px-3 py-1 rounded-full">
-            第 <span id="currentQNum">1</span> / 10 题
-          </span>
-        </div>
-        <div class="flex items-center gap-1 font-bold text-amber-500 bg-amber-50 px-3 py-1 rounded-full text-sm">
-          <i class="fa-solid fa-trophy"></i> 得分: <span id="currentScore">0</span>
-        </div>
-      </div>
-
-      <!-- Mascot & Question Area -->
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-5 items-center">
-        <!-- Mascot Reaction -->
-        <div class="md:col-span-3 flex md:flex-col items-center justify-center gap-2 bg-pink-50/50 p-3 rounded-2xl border border-pink-100">
-          <div id="mascotEmoji" class="text-4xl md:text-5xl transition-transform duration-300 hover:scale-110">🐱</div>
-          <div id="mascotText" class="text-xs text-center text-pink-700 font-semibold">加油！仔细阅读题目哦！</div>
-        </div>
-
-        <!-- Question Box -->
-        <div class="md:col-span-9 bg-white p-4 md:p-5 rounded-2xl border-2 border-indigo-100 shadow-sm min-h-[110px] flex items-center">
-          <h2 id="questionTitle" class="text-sm md:text-base font-bold text-gray-800 leading-relaxed">
-            题目加载中...
-          </h2>
-        </div>
-      </div>
-
-      <!-- Options Container -->
-      <div id="optionsContainer" class="grid grid-cols-1 gap-3 mb-4">
-        <!-- Options generated via JS -->
-      </div>
-
-      <!-- Explanation Box -->
-      <div id="explanationBox" class="hidden mb-4 p-4 rounded-xl bg-blue-50 border border-blue-200 text-xs md:text-sm text-blue-900 animate-fade-in">
-        <div class="font-bold flex items-center gap-1 mb-1 text-blue-700">
-          <i class="fa-solid fa-book-bookmark"></i> 课本解析来源：
-        </div>
-        <div id="explanationText">--</div>
-      </div>
-
-      <!-- Next Button Footer -->
-      <div class="flex justify-end pt-2">
-        <button id="nextBtn" onclick="nextQuestion()" disabled class="px-6 py-2.5 rounded-xl font-bold btn-3d bg-gray-300 text-gray-500 cursor-not-allowed">
-          下一题 <i class="fa-solid fa-arrow-right ml-1"></i>
-        </button>
-      </div>
+    <!-- 答题界面 -->
+    <div id="quiz-screen" class="quiz-box">
+      <div class="q-count" id="q-idx">第 1 / 10 题</div>
+      <div class="q-text" id="q-text">问题内容...</div>
+      <div class="options" id="options-box"></div>
     </div>
 
-    <!-- 3. RESULT & LEADERBOARD SCREEN -->
-    <div id="resultCard" class="hidden w-full glass-card rounded-3xl p-6 md:p-8 text-center transition-all duration-300">
-      <div class="mb-2 text-5xl">🎉</div>
-      <h2 class="text-2xl font-extrabold text-gray-800 mb-1">挑战完成！测试结果</h2>
-      <p id="studentGreeting" class="text-xs text-gray-500 mb-4">棒极了，继续保持！</p>
-
-      <!-- Score Badge Box -->
-      <div class="bg-gradient-to-r from-amber-100 via-pink-100 to-indigo-100 p-5 rounded-2xl mb-6 shadow-inner border border-white">
-        <div class="text-4xl md:text-5xl font-black text-pink-600 mb-1">
-          <span id="finalScore">0</span> <span class="text-2xl text-gray-500 font-normal">/ 10</span>
-        </div>
-        <div id="scoreStars" class="text-amber-400 text-xl space-x-1 mb-2">
-          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-        </div>
-        <div id="scoreRemark" class="text-sm font-bold text-gray-700">太棒了！你是历史小达人！</div>
+    <!-- 结算界面 -->
+    <div id="result-screen" class="quiz-box" style="text-align: center;">
+      <div class="header">
+        <h1>🎉 挑战完成！</h1>
+        <p id="score-text" style="font-size: 20px; font-weight: bold; color: var(--primary); margin: 15px 0;"></p>
       </div>
-
-      <!-- Leaderboard Header -->
-      <div class="text-left mb-3 flex justify-between items-center">
-        <h3 class="font-bold text-gray-800 text-sm md:text-base flex items-center gap-2">
-          <i class="fa-solid fa-trophy text-amber-500"></i> 云端 / 本地英雄榜
-        </h3>
-        <span class="text-[11px] text-gray-400">*仅展示姓名与最高得分，保障账号安全</span>
-      </div>
-
-      <!-- Leaderboard Table/List -->
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden mb-6 max-h-56 overflow-y-auto">
-        <table class="w-full text-left text-xs md:text-sm">
-          <thead class="bg-gray-50 text-gray-500 font-semibold border-b">
-            <tr>
-              <th class="p-2.5 pl-4">排名</th>
-              <th class="p-2.5">学生姓名</th>
-              <th class="p-2.5 text-right pr-4">最高得分</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboardBody">
-            <!-- Dynamic entries -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex flex-col sm:flex-row gap-3 justify-center">
-        <button onclick="restartQuiz()" class="px-6 py-3 rounded-xl font-bold btn-3d btn-macaron-primary">
-          <i class="fa-solid fa-rotate-right mr-1"></i> 再次挑战
-        </button>
-      </div>
-    </div>
-
-  </main>
-
-  <div id="teacherAuthModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-gray-800 text-base flex items-center gap-2">
-          <i class="fa-solid fa-user-shield text-indigo-500"></i> 教师身份验证
-        </h3>
-        <button onclick="closeModal('teacherAuthModal')" class="text-gray-400 hover:text-gray-600">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-      <p class="text-xs text-gray-500 mb-4">请输入教师专用后台密码以查看全班学生答题成绩与导出数据。</p>
-      
-      <input type="password" id="teacherPasswordInput" placeholder="输入密码" 
-        class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:border-indigo-500 focus:outline-none mb-3 text-sm" />
-      
-      <div id="authError" class="hidden text-xs text-red-500 mb-3 font-medium">密码错误，请重新输入！</div>
-
-      <div class="flex justify-end gap-2">
-        <button onclick="closeModal('teacherAuthModal')" class="px-4 py-2 rounded-lg text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200">
-          取消
-        </button>
-        <button onclick="verifyTeacherPassword()" class="px-4 py-2 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700">
-          确认登录
-        </button>
-      </div>
+      <button class="btn" onclick="location.reload()">重新挑战</button>
     </div>
   </div>
 
-  <div id="teacherDashboardModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-3 md:p-6">
-    <div class="bg-white w-full max-w-4xl h-[90vh] rounded-2xl p-4 md:p-6 shadow-2xl flex flex-col justify-between">
-      
-      <!-- Modal Header -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-4 border-b border-gray-200">
-        <div>
-          <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-            <i class="fa-solid fa-chart-line text-indigo-600"></i> 教师后台数据统计面板
-          </h2>
-          <p class="text-xs text-gray-500">单元11：国语的功用与地位 · 全班提交监控</p>
-        </div>
-        <div class="flex gap-2">
-          <button onclick="exportToCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm">
-            <i class="fa-solid fa-file-excel"></i> 📥 导出成绩单 (CSV/Excel)
-          </button>
-          <button onclick="closeModal('teacherDashboardModal')" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-bold">
-            关闭
-          </button>
-        </div>
-      </div>
-
-      <!-- Controls & Search -->
-      <div class="py-3 flex flex-col sm:flex-row justify-between gap-2">
-        <input type="text" id="searchStudentInput" onkeyup="filterRecords()" placeholder="🔍 搜索学生姓名或账号..." 
-          class="px-3 py-1.5 border border-gray-300 rounded-lg text-xs w-full sm:w-64 focus:outline-none focus:border-indigo-500" />
-        <button onclick="clearAllData()" class="text-xs text-red-500 hover:text-red-700 font-semibold flex items-center gap-1">
-          <i class="fa-solid fa-trash-can"></i> 清空全部测试数据
-        </button>
-      </div>
-
-      <!-- Data Table Area -->
-      <div class="flex-1 overflow-auto border border-gray-200 rounded-xl mb-3">
-        <table class="w-full text-left border-collapse text-xs">
-          <thead class="bg-indigo-50 text-indigo-900 sticky top-0 font-bold border-b border-gray-200">
-            <tr>
-              <th class="p-3">序号</th>
-              <th class="p-3">学生姓名</th>
-              <th class="p-3">MOE 邮箱账号</th>
-              <th class="p-3">得分 / 总分</th>
-              <th class="p-3">正确率</th>
-              <th class="p-3">提交时间</th>
-              <th class="p-3 text-center">操作</th>
-            </tr>
-          </thead>
-          <tbody id="teacherRecordsTable" class="divide-y divide-gray-100">
-            <!-- Records populated dynamically -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Footer Info -->
-      <div class="pt-2 border-t border-gray-100 flex justify-between items-center text-[11px] text-gray-400">
-        <span>共搜集到 <strong id="totalRecordsCount" class="text-indigo-600">0</strong> 条学生提交记录</span>
-        <span>数据实时保存在本地存储 (LocalStorage)</span>
-      </div>
+  <!-- 教师验证弹窗 -->
+  <div class="modal" id="login-modal">
+    <div class="modal-content">
+      <h3>教师身份验证</h3>
+      <input type="password" id="pwd-input" placeholder="密码" style="width: 100%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; border-radius: 8px;">
+      <button class="btn" onclick="checkPwd()">登录</button>
     </div>
   </div>
 
-  <script>
-    /* =========================================================
-       1. QUESTION BANK DATA (10 QUESTIONS)
-       ========================================================= */
-    const questions = [
-      {
-        question: "1. 根据联邦宪法，哪一个条文确立了马来语作为马来西亚国语（Bahasa Kebangsaan）的官方地位？",
-        options: [
-          "A. 第10条文",
-          "B. 第152条文",
-          "C. 第153条文",
-          "D. 第181条文"
-        ],
-        answer: 1,
-        explanation: "联邦宪法第152条文明确规定马来语为国语。"
-      },
-      {
-        question: "2. 联邦宪法第152条文在将马来语列为国语的同时，对其他语言作出了什么明确保障？",
-        options: [
-          "A. 禁止在非官方场合使用其他语言",
-          "B. 强制所有学校只能使用马来语教学",
-          "C. 不得禁止或阻止任何人使用（非官方用途）、教授或学习其他语言",
-          "D. 规定所有私人商业合同必须附上其他语言翻译"
-        ],
-        answer: 2,
-        explanation: "宪法第152条文保障任何人均不得被禁止或阻止在非官方用途中使用、教授或学习其他语言。"
-      },
-      {
-        question: "3. 下列哪一项法令是巩固马来语作为国语及官方语言地位的关键法律依据？",
-        options: [
-          "A. 1963/67年国语法案（Akta Bahasa Kebangsaan 1963/67）",
-          "B. 1957年内部安全法案",
-          "C. 1948年煽动法案",
-          "D. 1971年大专法案"
-        ],
-        answer: 0,
-        explanation: "1963/67年国语法案（Akta Bahasa Kebangsaan 1963/67）是保障国语地位的主要法律之一。"
-      },
-      {
-        question: "4. 除了国语法案外，国家还通过哪些教育法令来规范国语在国家教育体系中的重要地位？",
-        options: [
-          "A. 1955年劳工法案",
-          "B. 1961年教育法案与1996年教育法案",
-          "C. 1967年所得税法案",
-          "D. 1988年传染病预防法案"
-        ],
-        answer: 1,
-        explanation: "1961年教育法案与1996年教育法案确立了国语在教育体系中的地位。"
-      },
-      {
-        question: "5. 在马来西亚，负责出版书籍辞书、推广与发展马来语，以巩固国语地位的核心专业机构是哪一个？",
-        options: [
-          "A. 国家档案局（Arkib Negara Malaysia）",
-          "B. 国家新闻局（Jabatan Penerangan Malaysia）",
-          "C. 国家语文局（Dewan Bahasa dan Pustaka, DBP）",
-          "D. Perpustakaan Negara Malaysia"
-        ],
-        answer: 2,
-        explanation: "国家语文局（Dewan Bahasa dan Pustaka, DBP）是负责推动与巩固国语发展的主要机构。"
-      },
-      {
-        question: "6. 国语在马来西亚多元种族社会中发挥着重要的统合（Bahasa Perpaduan）功能，其主要作用是什么？",
-        options: [
-          "A. 促进各族群之间的沟通，建立团结与和谐的国家",
-          "B. 替代所有地方族群的方言与母语",
-          "C. 仅用于政府部门内部的公文往来",
-          "D. 限制民间文化艺术的发展"
-        ],
-        answer: 0,
-        explanation: "国语作为团结语言（Bahasa Perpaduan），能凝聚各族群并促进国家和谐。"
-      },
-      {
-        question: "7. 马来语被列为国家的文化遗产（Warisan Negara），这主要体现了马来语的什么价值？",
-        options: [
-          "A. 仅反映外来词汇的吸纳过程",
-          "B. 展现了一个民族悠久的历史文化与文明传承",
-          "C. 属于近几十年才创立的现代化语言",
-          "D. 仅用于商业贸易结算"
-        ],
-        answer: 1,
-        explanation: "马来语作为国家遗产（Warisan Negara），反映了悠久的历史与文化文明。"
-      },
-      {
-        question: "8. 为了鼓励国民尊重与热爱国语，国家语文局（DBP）长期推广的著名国语宣传口号是？",
-        options: [
-          "A. 语言是民族的灵魂（Bahasa Jiwa Bangsa）",
-          "B. 勤学国语走向世界",
-          "C. 语言即是科技力量",
-          "D. 知识开创美好未来"
-        ],
-        answer: 0,
-        explanation: "“Bahasa Jiwa Bangsa”（语言是民族的灵魂）是推广国语的重要口号与精神象征。"
-      },
-      {
-        question: "9. 国语作为官方语言（Bahasa Rasmi），主要应用在下列哪一个领域？",
-        options: [
-          "A. 私人家庭内部的日常会话",
-          "B. 政府机关行政事务、官方仪式与法律文书",
-          "C. 国际跨国企业的内部邮件",
-          "D. 私人社交媒体的休闲聊天"
-        ],
-        answer: 1,
-        explanation: "官方语言主要应用于政府行政机关、官方仪式及法律等正式领域。"
-      },
-      {
-        question: "10. 作为马来西亚公民，我们在日常生活中应当如何展现维护与巩固国语地位的能力与态度？",
-        options: [
-          "A. 经常滥用不规范的混杂语言（Bahasa Rojak）",
-          "B. 正确、得体地使用国语，并为国语作为国家遗产感到自豪",
-          "C. 羞于在公开场合使用国语交流",
-          "D. 拒绝接触或学习任何其他语言"
-        ],
-        answer: 1,
-        explanation: "国民应规范使用国语，尊崇并传承国语这一国家文化遗产。"
-      }
-    ];
+  <!-- 教师后台数据弹窗 -->
+  <div class="modal" id="teacher-modal">
+    <div class="modal-content" style="max-width: 650px;">
+      <h3>全班成绩后台</h3>
+      <div style="margin: 10px 0; text-align: right;">
+        <button onclick="exportCSV()" style="padding: 6px 12px; background: #00b894; color: white; border: none; border-radius: 6px; cursor: pointer;">📥 导出 Excel/CSV</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>姓名</th>
+            <th>MOE 账号</th>
+            <th>得分</th>
+            <th>时间</th>
+          </tr>
+        </thead>
+        <tbody id="teacher-table"></tbody>
+      </table>
+      <button class="btn" onclick="closeModals()" style="margin-top: 15px; background: #636e72;">关闭</button>
+    </div>
+  </div>
 
-    /* =========================================================
-       2. STATE VARIABLES
-       ========================================================= */
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let currentStudent = { name: '', moe: '' };
-    let answered = false;
+<script>
+  const questions = [
+    { q: "根据《马来西亚联邦宪法》第152条文，马来语的地位是什么？", opts: ["官方语言", "国语与官方语言", "第二语言", "区域语言"], a: 1 },
+    { q: "国语在行政事务中的主要作用是什么？", opts: ["仅用于商业", "官方正式沟通与公文语言", "仅在学校教学", "私人交流"], a: 1 },
+    { q: "国语促进种族团结的主要原因是？", opts: ["它是唯一的语言", "作为共同的沟通桥梁", "它是最容易学的语言", "法律强制要求"], a: 1 },
+    { q: "以下哪项是国语作为商业语言的体现？", opts: ["签署官方商业契约与合同", "只在市场买菜使用", "国际贸易唯一语言", "不能在商业中使用"], a: 0 },
+    { q: "马来西亚哪部法律保障了国语作为官方语言的地位？", opts: ["《教育法案》", "《联邦宪法》", "《国家安全法》", "《劳动法》"], a: 1 },
+    { q: "国语在教育领域扮演什么角色？", opts: ["主要教学媒介语之一", "外语课程", "可选修科目", "仅用于体育课"], a: 0 },
+    { q: "建立国语的权威性有助于提升什么？", opts: ["个人知名度", "国家形象与尊严", "旅游收入", "科技发展"], a: 1 },
+    { q: "国家语文局（DBP）的主要职责是什么？", opts: ["推广与规范国语的使用", "修改国家宪法", "管理全国学校", "出版所有商业书籍"], a: 0 },
+    { q: "每年的“国语月”活动旨在？", opts: ["举行体育比赛", "提高国民对国语的热爱与掌握", "庆祝节日", "推广外语学习"], a: 1 },
+    { q: "身为马来西亚公民，我们应该如何对待国语？", opts: ["仅在考试时使用", "尊重、学习并自豪地使用国语", "忽略它", "只在家里使用"], a: 1 }
+  ];
 
-    // Web Audio Context synthesizer for pure code audio
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  let currentQ = 0;
+  let score = 0;
+  let stuName = "";
+  let stuEmail = "";
 
-    function playSound(type) {
-      if (!audioCtx) return;
-      try {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
+  const BIN_ID = "66f2a873e41b4d34e4367a8b"; 
+  const API_KEY = "$2a$10$8T0J4b1cQ9R8E3Z5W6V7U.X3Y2Z1A0B9C8D7E6F5G4H3I2J1K0L9M";
 
-        if (type === 'correct') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-          osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3); // A5
-          gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.3);
-        } else if (type === 'wrong') {
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
-          osc.frequency.exponentialRampToValueAtTime(130, audioCtx.currentTime + 0.4);
-          gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.4);
-        }
-      } catch (e) {
-        console.log("Audio play error:", e);
-      }
+  function startQuiz() {
+    stuName = document.getElementById('stu-name').value.trim();
+    stuEmail = document.getElementById('stu-email').value.trim().toLowerCase();
+    
+    let valid = true;
+    if(!stuName) { document.getElementById('name-err').style.display = 'block'; valid = false; }
+    else { document.getElementById('name-err').style.display = 'none'; }
+
+    if(!stuEmail.endsWith('@moe-dl.edu.my')) { document.getElementById('email-err').style.display = 'block'; valid = false; }
+    else { document.getElementById('email-err').style.display = 'none'; }
+
+    if(!valid) return;
+
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('quiz-screen').style.display = 'block';
+    showQuestion();
+  }
+
+  function showQuestion() {
+    const q = questions[currentQ];
+    document.getElementById('q-idx').innerText = `第 ${currentQ + 1} / ${questions.length} 题`;
+    document.getElementById('q-text').innerText = q.q;
+    
+    const optsBox = document.getElementById('options-box');
+    optsBox.innerHTML = '';
+    q.opts.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.innerText = opt;
+      btn.onclick = () => selectOpt(idx, btn);
+      optsBox.appendChild(btn);
+    });
+  }
+
+  function selectOpt(idx, btn) {
+    const q = questions[currentQ];
+    const btns = document.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
+
+    if(idx === q.a) {
+      btn.classList.add('correct');
+      score++;
+    } else {
+      btn.classList.add('wrong');
+      btns[q.a].classList.add('correct');
     }
 
-    /* =========================================================
-       3. NAVIGATION & QUIZ FLOW
-       ========================================================= */
-    function startQuiz() {
-      const nameInput = document.getElementById('studentName').value.trim();
-      const moeInput = document.getElementById('studentMoe').value.trim();
-      const errDiv = document.getElementById('loginError');
-
-      if (!nameInput) {
-        errDiv.innerText = "请输入学生姓名！";
-        errDiv.classList.remove('hidden');
-        return;
-      }
-
-      // Check MOE Email extension
-      const moeRegex = /^[a-zA-Z0-9._%+-]+@moe-dl\.edu\.my$/i;
-      if (!moeRegex.test(moeInput)) {
-        errDiv.innerText = "MOE 邮箱格式不正确！必须以 @moe-dl.edu.my 结尾。";
-        errDiv.classList.remove('hidden');
-        return;
-      }
-
-      errDiv.classList.add('hidden');
-      currentStudent = { name: nameInput, moe: moeInput.toLowerCase() };
-
-      // Initialize State
-      currentQuestionIndex = 0;
-      score = 0;
-      
-      document.getElementById('loginCard').classList.add('hidden');
-      document.getElementById('quizCard').classList.remove('hidden');
-      
-      loadQuestion();
-    }
-
-    function loadQuestion() {
-      answered = false;
-      const q = questions[currentQuestionIndex];
-
-      document.getElementById('currentQNum').innerText = currentQuestionIndex + 1;
-      document.getElementById('currentScore').innerText = score;
-      document.getElementById('questionTitle').innerText = q.question;
-
-      // Mascot State Reset
-      document.getElementById('mascotEmoji').innerText = '🐱';
-      document.getElementById('mascotText').innerText = '仔细思考，你可以答对的！';
-
-      // Hide explanation
-      document.getElementById('explanationBox').classList.add('hidden');
-
-      // Next Button state
-      const nextBtn = document.getElementById('nextBtn');
-      nextBtn.disabled = true;
-      nextBtn.className = "px-6 py-2.5 rounded-xl font-bold btn-3d bg-gray-300 text-gray-500 cursor-not-allowed";
-
-      // Render Options
-      const optionsContainer = document.getElementById('optionsContainer');
-      optionsContainer.innerHTML = '';
-
-      q.options.forEach((optText, index) => {
-        const btn = document.createElement('button');
-        btn.className = "btn-option w-full p-3.5 rounded-xl text-left text-xs md:text-sm text-gray-700 flex items-center justify-between shadow-sm font-medium";
-        btn.innerHTML = `
-          <span>${optText}</span>
-          <i class="fa-regular fa-circle text-gray-300 option-icon"></i>
-        `;
-        btn.onclick = () => selectOption(index);
-        optionsContainer.appendChild(btn);
-      });
-    }
-
-    function selectOption(selectedIndex) {
-      if (answered) return;
-      answered = true;
-
-      const q = questions[currentQuestionIndex];
-      const isCorrect = selectedIndex === q.answer;
-      const optionsBtns = document.getElementById('optionsContainer').children;
-
-      if (isCorrect) {
-        score++;
-        playSound('correct');
-        document.getElementById('currentScore').innerText = score;
-        
-        // Highlight chosen option
-        optionsBtns[selectedIndex].classList.add('option-correct');
-        optionsBtns[selectedIndex].querySelector('.option-icon').className = 'fa-solid fa-circle-check text-green-600 text-base';
-
-        // Mascot happy
-        document.getElementById('mascotEmoji').innerText = '😸';
-        document.getElementById('mascotText').innerText = '真厉害！完全答对了！';
-      } else {
-        playSound('wrong');
-        
-        // Highlight wrong chosen
-        optionsBtns[selectedIndex].classList.add('option-wrong');
-        optionsBtns[selectedIndex].querySelector('.option-icon').className = 'fa-solid fa-circle-xmark text-red-600 text-base';
-
-        // Highlight right option
-        optionsBtns[q.answer].classList.add('option-correct');
-        optionsBtns[q.answer].querySelector('.option-icon').className = 'fa-solid fa-circle-check text-green-600 text-base';
-
-        // Mascot sad
-        document.getElementById('mascotEmoji').innerText = '😿';
-        document.getElementById('mascotText').innerText = '没关系，看看解析吸收知识！';
-      }
-
-      // Disable all buttons
-      Array.from(optionsBtns).forEach(btn => btn.disabled = true);
-
-      // Show explanation
-      document.getElementById('explanationText').innerText = q.explanation;
-      document.getElementById('explanationBox').classList.remove('hidden');
-
-      // Enable Next Button
-      const nextBtn = document.getElementById('nextBtn');
-      nextBtn.disabled = false;
-      nextBtn.className = "px-6 py-2.5 rounded-xl font-bold btn-3d btn-macaron-primary cursor-pointer";
-    }
-
-    function nextQuestion() {
-      currentQuestionIndex++;
-      if (currentQuestionIndex < questions.length) {
-        loadQuestion();
+    setTimeout(() => {
+      currentQ++;
+      if(currentQ < questions.length) {
+        showQuestion();
       } else {
         finishQuiz();
       }
-    }
+    }, 1200);
+  }
 
-    function finishQuiz() {
-      document.getElementById('quizCard').classList.add('hidden');
-      document.getElementById('resultCard').classList.remove('hidden');
+  function finishQuiz() {
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'block';
+    document.getElementById('score-text').innerText = `${stuName}，你的得分：${score} / ${questions.length}`;
+    saveDataCloud();
+  }
 
-      document.getElementById('finalScore').innerText = score;
-      document.getElementById('studentGreeting').innerText = `恭喜 ${currentStudent.name} 完成练习！`;
+  function saveDataCloud() {
+    const newData = {
+      name: stuName,
+      email: stuEmail,
+      score: score,
+      time: new Date().toLocaleString('zh-MY')
+    };
 
-      // Remarks & Stars
-      const remark = document.getElementById('scoreRemark');
-      const stars = document.getElementById('scoreStars');
+    let local = JSON.parse(localStorage.getItem('history_scores') || '[]');
+    local.push(newData);
+    localStorage.setItem('history_scores', JSON.stringify(local));
 
-      if (score === 10) {
-        remark.innerText = "🌟 完美满分！你是顶尖历史知识小达人！";
-        stars.innerHTML = `<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>`;
-        // Trigger Confetti
-        if (typeof confetti === 'function') {
-          confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-        }
-      } else if (score >= 7) {
-        remark.innerText = "👍 表现优秀！对国语的地位掌握得很牢固！";
-        stars.innerHTML = `<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>`;
-      } else {
-        remark.innerText = "💪 继续加油！多复习课本能取得更大进步！";
-        stars.innerHTML = `<i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>`;
-      }
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+      method: 'GET',
+      headers: { 'X-Master-Key': API_KEY }
+    }).then(res => res.json()).then(data => {
+      let list = data.record || [];
+      if(!Array.isArray(list)) list = [];
+      list.push(newData);
 
-      // Save Record & Render Leaderboard
-      saveStudentRecord(currentStudent.name, currentStudent.moe, score);
-      renderLeaderboard();
-    }
-
-    function restartQuiz() {
-      document.getElementById('resultCard').classList.add('hidden');
-      document.getElementById('loginCard').classList.remove('hidden');
-    }
-
-    /* =========================================================
-       4. LOCAL STORAGE & DATA MANAGEMENT
-       ========================================================= */
-    const STORAGE_KEY = 'history_year5_unit11_records';
-
-    function getStoredRecords() {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    }
-
-    function saveStudentRecord(name, moe, score) {
-      let records = getStoredRecords();
-      const now = new Date();
-      const timestamp = now.getFullYear() + '-' + 
-        String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-        String(now.getDate()).padStart(2, '0') + ' ' + 
-        String(now.getHours()).padStart(2, '0') + ':' + 
-        String(now.getMinutes()).padStart(2, '0');
-
-      records.push({
-        id: Date.now(),
-        name: name,
-        moe: moe,
-        score: score,
-        total: 10,
-        rate: (score / 10 * 100).toFixed(0) + '%',
-        time: timestamp
+      fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': API_KEY
+        },
+        body: JSON.stringify(list)
       });
+    }).catch(e => console.log('Cloud sync backup used'));
+  }
 
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+  function openTeacherModal() {
+    document.getElementById('login-modal').style.display = 'flex';
+  }
+
+  function checkPwd() {
+    const pwd = document.getElementById('pwd-input').value;
+    if(pwd === '2020Hui%%') {
+      document.getElementById('login-modal').style.display = 'none';
+      document.getElementById('teacher-modal').style.display = 'flex';
+      loadTeacherData();
+    } else {
+      alert('密码错误！');
     }
+  }
 
-    function renderLeaderboard() {
-      const records = getStoredRecords();
-      const tbody = document.getElementById('leaderboardBody');
-      tbody.innerHTML = '';
+  function loadTeacherData() {
+    const tbody = document.getElementById('teacher-table');
+    tbody.innerHTML = '<tr><td colspan="4">加载数据中...</td></tr>';
 
-      if (records.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-gray-400">暂无练习记录</td></tr>`;
-        return;
+    fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': API_KEY }
+    }).then(res => res.json()).then(data => {
+      let list = data.record || [];
+      if(!Array.isArray(list) || list.length === 0) {
+        list = JSON.parse(localStorage.getItem('history_scores') || '[]');
       }
+      renderTable(list);
+    }).catch(() => {
+      let list = JSON.parse(localStorage.getItem('history_scores') || '[]');
+      renderTable(list);
+    });
+  }
 
-      // Group highest score per student name (privacy preserved - NO MOE ACCOUNT DISPLAYED)
-      const maxScores = {};
-      records.forEach(r => {
-        if (!maxScores[r.name] || r.score > maxScores[r.name]) {
-          maxScores[r.name] = r.score;
-        }
-      });
-
-      // Sort descending
-      const sorted = Object.keys(maxScores)
-        .map(name => ({ name, score: maxScores[name] }))
-        .sort((a, b) => b.score - a.score);
-
-      sorted.forEach((item, index) => {
-        let badge = `<span class="font-bold text-gray-500">${index + 1}</span>`;
-        if (index === 0) badge = `🥇`;
-        if (index === 1) badge = `🥈`;
-        if (index === 2) badge = `🥉`;
-
-        const tr = document.createElement('tr');
-        tr.className = "border-b border-gray-100 hover:bg-gray-50";
-        tr.innerHTML = `
-          <td class="p-2.5 pl-4">${badge}</td>
-          <td class="p-2.5 font-bold text-gray-700">${escapeHtml(item.name)}</td>
-          <td class="p-2.5 text-right pr-4 font-black text-pink-600">${item.score} / 10</td>
-        `;
-        tbody.appendChild(tr);
-      });
+  function renderTable(list) {
+    const tbody = document.getElementById('teacher-table');
+    tbody.innerHTML = '';
+    if(list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4">暂无提交记录</td></tr>';
+      return;
     }
+    list.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${item.name}</td><td>${item.email}</td><td>${item.score}/10</td><td>${item.time}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
 
-    function escapeHtml(str) {
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
+  function exportCSV() {
+    let list = JSON.parse(localStorage.getItem('history_scores') || '[]');
+    let csv = "\uFEFF姓名,MOE账号,得分,提交时间\n";
+    list.forEach(r => { csv += `"${r.name}","${r.email}","${r.score}","${r.time}"\n`; });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "五年级历史单元11学生成绩.csv";
+    link.click();
+  }
 
-    /* =========================================================
-       5. TEACHER DASHBOARD & AUTH
-       ========================================================= */
-    const TEACHER_PASS = "2020Hui%%";
-
-    function openTeacherAuthModal() {
-      document.getElementById('teacherPasswordInput').value = '';
-      document.getElementById('authError').classList.add('hidden');
-      document.getElementById('teacherAuthModal').classList.remove('hidden');
-    }
-
-    function verifyTeacherPassword() {
-      const input = document.getElementById('teacherPasswordInput').value;
-      if (input === TEACHER_PASS) {
-        closeModal('teacherAuthModal');
-        openTeacherDashboard();
-      } else {
-        document.getElementById('authError').classList.remove('hidden');
-      }
-    }
-
-    function openTeacherDashboard() {
-      renderTeacherTable();
-      document.getElementById('teacherDashboardModal').classList.remove('hidden');
-    }
-
-    function renderTeacherTable() {
-      const records = getStoredRecords();
-      const tbody = document.getElementById('teacherRecordsTable');
-      tbody.innerHTML = '';
-
-      document.getElementById('totalRecordsCount').innerText = records.length;
-
-      if (records.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="text-center p-6 text-gray-400">尚无任何提交记录</td></tr>`;
-        return;
-      }
-
-      records.slice().reverse().forEach((r, idx) => {
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-gray-50 transition";
-        tr.innerHTML = `
-          <td class="p-3 text-gray-400">${records.length - idx}</td>
-          <td class="p-3 font-bold text-gray-800">${escapeHtml(r.name)}</td>
-          <td class="p-3 font-mono text-gray-600">${escapeHtml(r.moe)}</td>
-          <td class="p-3 font-bold text-pink-600">${r.score} / ${r.total}</td>
-          <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.score >= 7 ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}">${r.rate}</span></td>
-          <td class="p-3 text-gray-500 text-[11px]">${r.time}</td>
-          <td class="p-3 text-center">
-            <button onclick="deleteRecord(${r.id})" class="text-red-400 hover:text-red-600 p-1">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function filterRecords() {
-      const query = document.getElementById('searchStudentInput').value.toLowerCase();
-      const rows = document.getElementById('teacherRecordsTable').getElementsByTagName('tr');
-
-      Array.from(rows).forEach(row => {
-        const text = row.innerText.toLowerCase();
-        row.style.display = text.includes(query) ? '' : 'none';
-      });
-    }
-
-    function deleteRecord(id) {
-      let records = getStoredRecords();
-      records = records.filter(r => r.id !== id);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-      renderTeacherTable();
-    }
-
-    function clearAllData() {
-      if (confirm("确定要清空所有学生测试提交记录吗？此操作不可恢复！")) {
-        localStorage.removeItem(STORAGE_KEY);
-        renderTeacherTable();
-      }
-    }
-
-    function exportToCSV() {
-      const records = getStoredRecords();
-      if (records.length === 0) {
-        alert("暂无数据可导出！");
-        return;
-      }
-
-      // UTF-8 BOM for Excel Chinese support
-      let csvContent = "\uFEFF";
-      csvContent += "序号,学生姓名,MOE邮箱账号,得分,总分,正确率,提交时间\n";
-
-      records.forEach((r, index) => {
-        csvContent += `${index + 1},"${r.name}","${r.moe}",${r.score},${r.total},"${r.rate}","${r.time}"\n`;
-      });
-
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.setAttribute("href", url);
-      link.setAttribute("download", `5年级历史_单元11_成绩单_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-  </script>
+  function closeModals() {
+    document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+  }
+</script>
 </body>
 </html>
